@@ -4,7 +4,6 @@ const PATH = require('path')
 const { Rating, seed } = require('./db')
 
 seed()
-
 app.use(express.urlencoded());
 app.use(express.json());
 
@@ -26,6 +25,4 @@ app.post('/vote', async (req, res, next) => {
 })
 
 app.listen(3000, () => console.log("I am listening"))
-
-
 

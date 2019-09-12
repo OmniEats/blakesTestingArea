@@ -14,9 +14,34 @@ const Rating = db.define('rating', {
     type: Sequelize.INTEGER,
     defaultValue: 0
   },
-  name: Sequelize.STRING
 });
 
+const Restaurant = db.define('restaurant', {
+  id: {
+    primaryKey: true,
+    type: Sequelize.UUID,
+    defaultValue: Sequelize.UUIDV4
+  },
+  name: {
+   type: Sequelize.STRING,
+   allowNull: false
+  }
+})
+
+const User = db.define('user', {
+  id: {
+    primaryKey: true,
+    type: Sequelize.UUID,
+    defaultValue: Sequelize.UUIDV4
+  },
+  name: Sequelize.STRING
+})
+
+Rating.belongsTo(Restaurant)
+Restaurant.hasOne(Rating)
+
+Rating.belongsToMany(User, {through: 'userRating'})
+User.belongsToMany(Rating, {through: 'userRating'})
 
 Rating.prototype.onVote = async function(vote) {
   this.ratingsCount++;
@@ -42,11 +67,12 @@ Rating.prototype.onVote = async function(vote) {
 
 const seed = async () => {
   await db.sync({ force: true });
-  await Rating.create({ name: 'test' });
 };
 
 module.exports = {
   db,
   Rating,
+  Restaurant,
+  User,
   seed
 };
