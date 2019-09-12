@@ -1,0 +1,63 @@
+<html>
+  <head>
+<style>
+
+</style>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js'></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/react-router-dom/5.0.0/react-router-dom.js'></script>
+  </head>
+  <body>
+    <div id='root'></div>
+    <script type='text/babel'>
+
+      class APP extends React.Component {
+        constructor() {
+          super()
+          this.state = {
+            voteCounts: 0,
+            score: '',
+            average: 0
+          }
+          this.onClickYes = this.onClickYes.bind(this)
+          this.onClickMaybe = this.onClickMaybe.bind(this)
+          this.onClickNo = this.onClickNo.bind(this)
+        }
+
+        async onClickYes() {
+          const response = await axios.post('/vote', {vote: "yes"})
+          console.log(response.data)
+        }
+        async onClickMaybe() {
+          const response = await axios.post('/vote', {vote: "maybe"})
+          console.log(response.data)
+        }
+        async onClickNo() {
+          const response = await axios.post('/vote', {vote: "no"})
+          console.log(response.data)
+        }
+
+        render() {
+          const { voteCounts, score, average } = this.state
+          const { onClickYes, onClickMaybe, onClickNo } = this
+        return (
+          <div>
+          <button type="submit" onClick={onClickYes}>YES VOTE</button>
+          <button type="submit" onClick={onClickMaybe}>Maybe VOTE</button>
+          <button type="submit" onClick={onClickNo}>No VOTE</button>
+          <h3>Vote Counts: {voteCounts}</h3>
+          <h3>Score: {score}</h3>
+          <h3>Average: {average}</h3>
+          </div>
+        )
+        }
+      }
+
+
+      const root = document.querySelector('#root');
+      ReactDOM.render(<APP />, root);
+    </script>
+  </body>
+</html>
